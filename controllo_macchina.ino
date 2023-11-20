@@ -17,12 +17,13 @@ const int downButton = 4;
 
 //Valori di default
 int cw = 1; //variabile di controllo della direzione -> orario predefinito
-int numeroSpire = 790;
+int numeroSpire = 5000;
 
 //Variabili di controllo
 long int tempoAvvio = 0;
 int giriEffettuati = 0;
 int giriMinuto = 0;
+float rpm_max_motore = 790.0;
 
 
 void setup()
@@ -62,11 +63,15 @@ void setup()
  
   while(!digitalRead(progButton)){
     if (digitalRead(upButton)) { //se premo up
-      numeroSpire = numeroSpire +1;
+      numeroSpire = numeroSpire +100;
+      lcd.setCursor(0,1); //Riposiziono il cursore
+      lcd.print(numeroSpire);
       Serial.println(numeroSpire);
     } 
     if (digitalRead(downButton)) { //se premo down
-      numeroSpire = numeroSpire -1;
+      numeroSpire = numeroSpire -100;
+      lcd.setCursor(0,1); //Riposiziono il cursore
+      lcd.print(numeroSpire);
       Serial.println(numeroSpire);
     }
     delay(100);
@@ -103,9 +108,9 @@ void setup()
   
      delay(4000);
   
-    giriMinuto = (pot/1023.0)*790; //suppongo 50 rpm velocità massima di rotazione 
+    giriMinuto = (pot/1023.0)*rpm_max_motore; //suppongo 50 rpm velocità massima di rotazione 
     
-    int duty = (giriMinuto/790.0)*255; 
+    int duty = (giriMinuto/rpm_max_motore)*255; 
    
     //Il duty cycle del segnale PWM determina la tensione di alimentazione motore: 
     //duty = 255 ->motore 50 rpm
